@@ -1,0 +1,20 @@
+!!!
+%html
+  %head
+    %title Healthcare Volunteering
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload'
+    = javascript_pack_tag 'application', 'data-turbo-track': 'reload'
+  %body
+    .container.mt-4
+      - flash.each do |key, message|
+        - bootstrap_class =
+          case key
+          when 'notice' then 'alert alert-success'
+          when 'alert' then 'alert alert-danger'
+          else 'alert alert-info'
+          end
+        .{class: bootstrap_class role: 'alert'}
+          = message
+      = yield

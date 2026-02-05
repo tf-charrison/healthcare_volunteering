@@ -1,0 +1,15 @@
+development:
+  adapter: mysql2
+  encoding: utf8mb4
+  database: healthcare_volunteering_development
+  username: charrison
+  password: password
+  host: localhost
+
+test:
+  adapter: mysql2
+  encoding: utf8mb4
+  database: healthcare_volunteering_test
+  username: charrison
+  password: password
+  host: localhost

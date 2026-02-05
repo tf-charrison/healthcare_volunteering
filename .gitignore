@@ -1,0 +1,18 @@
+# Rails
+/.bundle
+/log/*
+/tmp/*
+/db/*.sqlite3
+/db/*.sqlite3-journal
+/public/system
+/public/uploads
+.byebug_history
+/node_modules
+/yarn-error.log
+/vendor/bundle
+.env
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
