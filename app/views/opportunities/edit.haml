@@ -1,0 +1,41 @@
+.container.mt-5
+  .row.justify-content-center
+    .col-lg-8
+      %h1.mb-4 Post a New Opportunity
+
+      = form_with model: @opportunity, local: true do |f|
+        - if @opportunity.errors.any?
+          .alert.alert-danger
+            %h4.mb-3
+              = pluralize(@opportunity.errors.count, "error") + " prohibited this opportunity from being saved:"
+            %ul
+              - @opportunity.errors.full_messages.each do |msg|
+                %li= msg
+
+        .mb-3
+          = f.label :title, class: "form-label"
+          = f.text_field :title, class: "form-control", placeholder: "e.g., Weekend Healthcare Volunteer"
+
+        .mb-3
+          = f.label :description, class: "form-label"
+          = f.text_area :description, class: "form-control", placeholder: "Describe the opportunity...", rows: 5
+
+        .mb-3
+          = f.label :location, class: "form-label"
+          = f.text_field :location, class: "form-control", placeholder: "City, Hospital or Clinic Name"
+
+        .mb-3
+          = f.label :start_date, "Start Date", class: "form-label"
+          = f.date_field :start_date, class: "form-control"
+
+        .mb-3
+          = f.label :end_date, "End Date", class: "form-label"
+          = f.date_field :end_date, class: "form-control"
+
+        .mb-3
+          = f.label :skills_required, "Required Skills", class: "form-label"
+          = f.text_field :skills_required, class: "form-control", placeholder: "e.g., CPR, Patient Care"
+
+        .d-flex.justify-content-between.mt-4
+          = link_to "Back to Dashboard", organisation_profile_path, class: "btn btn-secondary"
+          = f.submit "Create Opportunity", class: "btn btn-success"

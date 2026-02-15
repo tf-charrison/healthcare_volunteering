@@ -1,20 +1,48 @@
-!!!
 %html
   %head
     %title Healthcare Volunteering
     = csrf_meta_tags
     = csp_meta_tag
-    = stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload'
-    = javascript_pack_tag 'application', 'data-turbo-track': 'reload'
+
+    = stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload"
+    = javascript_importmap_tags
+
   %body
+    / Navbar
+    %nav.navbar.navbar-expand-lg.navbar-light.bg-light
+      .container
+        = link_to "HealthVol", root_path, class: "navbar-brand"
+
+        %ul.navbar-nav.ms-auto
+          - if volunteer_signed_in?
+            %li.nav-item
+              = link_to "Profile", volunteer_profile_path, class: "nav-link"
+            %li.nav-item
+              = button_to "Logout", destroy_volunteer_session_path, method: :delete, form_class: "d-inline", class: "btn btn-link nav-link"
+
+          - elsif organisation_signed_in?
+            %li.nav-item
+              = link_to "Dashboard", organisation_profile_path, class: "nav-link"
+              %li.nav-item
+              = button_to "Logout", destroy_organisation_session_path, method: :delete, form_class: "d-inline", class: "btn btn-link nav-link"
+
+          - else
+            %li.nav-item
+              = link_to "Volunteer Sign Up", new_volunteer_registration_path, class: "nav-link"
+            %li.nav-item
+              = link_to "Volunteer Sign In", new_volunteer_session_path, class: "nav-link"
+            %li.nav-item
+              = link_to "Organisation Sign Up", new_organisation_registration_path, class: "nav-link"
+            %li.nav-item
+              = link_to "Organisation Sign In", new_organisation_session_path, class: "nav-link"
+
+
+    / Flash messages + main content
     .container.mt-4
       - flash.each do |key, message|
-        - bootstrap_class =
-          case key
-          when 'notice' then 'alert alert-success'
-          when 'alert' then 'alert alert-danger'
-          else 'alert alert-info'
-          end
-        .{class: bootstrap_class role: 'alert'}
+        .alert{ class: bootstrap_flash_class(key), role: "alert" }
           = message
-      = yield
+
+      .row.justify-content-center
+        .col-lg-10
+          = yield

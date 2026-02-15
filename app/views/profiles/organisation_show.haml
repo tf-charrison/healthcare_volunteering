@@ -1,0 +1,17 @@
+.container.mt-5
+  %h1 Organisation Profile
+  %table.table.table-bordered.mt-3
+    %tbody
+      %tr
+        %th Name
+        %td= @organisation.name
+      %tr
+        %th Email
+        %td= @organisation.email
+      %tr
+        %th Phone Number
+        %td= @organisation.phone_number
+      %tr
+        %th Address
+        %td= @organisation.address
+  = link_to "Edit Profile", edit_organisation_profile_path, class: "btn btn-success mt-3"
