@@ -1,0 +1,17 @@
+.container.mt-5
+  %h1 My Profile
+  %table.table.table-bordered.mt-3
+    %tbody
+      %tr
+        %th First Name
+        %td= @volunteer.first_name
+      %tr
+        %th Last Name
+        %td= @volunteer.last_name
+      %tr
+        %th Email
+        %td= @volunteer.email
+      %tr
+        %th Phone Number
+        %td= @volunteer.phone_number
+  = link_to "Edit Profile", volunteer_profile_edit_path, class: "btn btn-primary mt-3"

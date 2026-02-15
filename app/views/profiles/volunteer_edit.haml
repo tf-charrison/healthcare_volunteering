@@ -1,0 +1,25 @@
+.container.mt-5
+  %h1 Edit Profile
+
+  = link_to "Back", volunteer_profile_path, class: "btn btn-secondary mb-3"
+
+  = form_with model: @volunteer, url: volunteer_profile_path, local: true, method: :patch, class: "mt-4" do |f|
+    .mb-3
+      = f.label :first_name
+      = f.text_field :first_name, class: "form-control"
+    .mb-3
+      = f.label :last_name
+      = f.text_field :last_name, class: "form-control"
+    .mb-3
+      = f.label :email
+      = f.email_field :email, class: "form-control"
+    .mb-3
+      = f.label :phone_number
+      = f.telephone_field :phone_number, class: "form-control"
+    .mb-3
+      = f.label :password, "New Password"
+      = f.password_field :password, class: "form-control", autocomplete: "new-password"
+    .mb-3
+      = f.label :password_confirmation
+      = f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password"
+    = f.submit "Update Profile", class: "btn btn-primary"
