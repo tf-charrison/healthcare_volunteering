@@ -1,0 +1,37 @@
+.container.mt-5
+  %h1= @opportunity.title
+  %p.text-muted
+    %strong Organisation: 
+    = @opportunity.organisation.name
+    - if @opportunity.organisation.respond_to?(:verified?) && @opportunity.organisation.verified?
+      %span.badge.bg-success Verified
+
+  %p
+    %strong Description:
+    = @opportunity.description
+
+  %p
+    %strong Location:
+    = @opportunity.location
+
+  %p
+    %strong Dates:
+    = @opportunity.start_date.strftime("%b %d, %Y") 
+    - 
+    = @opportunity.end_date.strftime("%b %d, %Y")
+
+  %p
+    %strong Skills Required:
+    = @opportunity.skills_required
+
+.mt-4.d-flex.gap-2.flex-wrap
+
+  - if volunteer_signed_in?
+    - if @opportunity.volunteers.include?(current_volunteer)
+      %span.badge.bg-secondary.align-self-center Applied
+    - else
+      = link_to "Apply for this Opportunity", new_opportunity_application_path(@opportunity), class: "btn btn-primary"
+
+  - if organisation_signed_in? && @opportunity.organisation == current_organisation
+    = link_to "Edit", edit_opportunity_path(@opportunity), class: "btn btn-warning"
+    = link_to "Delete", opportunity_path(@opportunity), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger"

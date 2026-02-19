@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  root 'opportunities#index'
+  get "dashboard/index"
+  get "applications/create"
+  get "applications/index"
+  get "home/index"
+  root "home#index"
 
   # Devise routes using custom controllers (only once per model)
   devise_for :volunteers, controllers: {
@@ -14,8 +18,10 @@ Rails.application.routes.draw do
 
   # Opportunities and applications
   resources :opportunities do
-    resources :applications, only: [:create, :index]
+    resources :applications, only: [:new, :create, :index]
   end
+
+  get "dashboard", to: "dashboard#index"
 
   # Profiles
   get   "volunteer_profile",        to: "profiles#volunteer_show"

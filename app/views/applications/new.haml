@@ -1,0 +1,19 @@
+.container.mt-5
+  %h1 Apply for #{@opportunity.title}
+
+  = form_with model: [@opportunity, @application], local: true do |f|
+
+    .mb-3
+      = f.label :cover_letter, "Why are you suitable for this role?"
+      = f.text_area :cover_letter, class: "form-control", rows: 5
+
+    .mb-3
+      = f.label :availability, "Availability"
+      = f.text_field :availability, class: "form-control", placeholder: "e.g. Weekends, Evenings"
+
+    .mb-3
+      = f.label :experience_summary, "Relevant Experience"
+      = f.text_area :experience_summary, class: "form-control", rows: 4
+
+    = f.submit "Submit Application", class: "btn btn-primary"
+    = link_to "Back", opportunity_path(@opportunity), class: "btn btn-secondary ms-2"
