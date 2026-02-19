@@ -29,8 +29,8 @@
               - else
                 %span.badge.bg-secondary Pending
             %td
-              = link_to "Approve", update_status_opportunity_application_path(@opportunity, application, status: "approved"), method: :patch, class: "btn btn-success btn-sm me-2"
-              = link_to "Reject", update_status_opportunity_application_path(@opportunity, application, status: "rejected"), method: :patch, class: "btn btn-danger btn-sm"
+              = link_to "Approve", change_status_opportunity_application_path(@opportunity, application, status: "approved"), method: :patch, class: "btn btn-success btn-sm me-2"
+              = link_to "Reject", change_status_opportunity_application_path(@opportunity, application, status: "rejected"), method: :patch, class: "btn btn-danger btn-sm"
               = link_to "View", opportunity_application_path(@opportunity, application), class: "btn btn-primary btn-sm ms-2"
   - else
     %p No applications yet.

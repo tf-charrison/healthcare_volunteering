@@ -9,11 +9,12 @@
           %th Organisation
           %th Status
           %th Applied On
+          %th Actions
       %tbody
         - @applications.each do |application|
           %tr
             %td
-              = link_to application.opportunity.title, opportunity_path(application.opportunity)
+              = application.opportunity.title
 
             %td
               = application.opportunity.organisation.name
@@ -29,6 +30,9 @@
 
             %td
               = application.created_at.strftime("%b %d, %Y")
+
+            %td
+              = link_to "View", opportunity_application_path(application.opportunity, application), class: "btn btn-primary btn-sm"
   - else
     %p.mt-4 You haven't applied to any opportunities yet.
     = link_to "Browse Opportunities", opportunities_path, class: "btn btn-primary mt-2"

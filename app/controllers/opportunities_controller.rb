@@ -1,6 +1,6 @@
 class OpportunitiesController < ApplicationController
   before_action :authenticate_organisation!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :set_opportunity, only: [:show, :edit, :update, :destroy]
+  before_action :set_opportunity, only: [:show, :edit, :update, :destroy, :applications_for_org]
 
   def index
     @opportunities = Opportunity.order(start_date: :asc)
@@ -38,6 +38,16 @@ class OpportunitiesController < ApplicationController
   def destroy
     @opportunity.destroy
     redirect_to opportunities_path, notice: "Opportunity deleted successfully."
+  end
+
+  def applications_for_org
+    # Only the organisation who owns this opportunity can see its applications
+    unless @opportunity.organisation == current_organisation
+      redirect_to opportunities_path, alert: "Not authorized"
+      return
+    end
+
+    @applications = @opportunity.applications.includes(:volunteer)
   end
 
   private

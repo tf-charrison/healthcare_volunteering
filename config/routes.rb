@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
   get "dashboard/index"
-  get "applications/create"
-  get "applications/index"
   get "home/index"
   root "home#index"
 
@@ -18,9 +16,22 @@ Rails.application.routes.draw do
 
   # Opportunities and applications
   resources :opportunities do
-    resources :applications, only: [:new, :create, :index]
+    # Volunteer-facing
+    resources :applications, only: [:new, :create, :show] do
+      patch :change_status, on: :member
+
+      # Messages nested under applications
+      resources :messages, only: [:create]
+    end
+
+    # Organisation-facing: view applications for this opportunity
+    member do
+      get :applications_for_org
+    end
   end
 
+  # Organisation dashboard
+  get "organisation_dashboard", to: "organisations#dashboard"
   get "dashboard", to: "dashboard#index"
 
   # Profiles

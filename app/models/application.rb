@@ -3,6 +3,7 @@ class Application < ApplicationRecord
 
   belongs_to :volunteer
   belongs_to :opportunity
+  has_many :messages, dependent: :destroy
 
   validates :volunteer_id, uniqueness: { scope: :opportunity_id }
 

@@ -1,0 +1,55 @@
+.container.mt-5
+  %h1 Application from #{ @application.volunteer.first_name } #{ @application.volunteer.last_name }
+
+  %p
+    %strong Email:
+    = @application.volunteer.email
+
+  %p
+    %strong Phone:
+    = @application.volunteer.phone_number
+
+  %p
+    %strong Availability:
+    = @application.availability
+
+  %p
+    %strong Experience Summary:
+    = @application.experience_summary
+
+  %p
+    %strong Cover Letter:
+    = @application.cover_letter
+
+  %p
+    %strong Status:
+    - case @application.status
+    - when "approved"
+      %span.badge.bg-success Approved
+    - when "rejected"
+      %span.badge.bg-danger Rejected
+    - else
+      %span.badge.bg-secondary Pending
+
+  %div.mb-3
+    - if @application.status == "pending" && current_organisation == @opportunity.organisation  
+      = link_to "Approve", change_status_opportunity_application_path(@opportunity, @application, status: "approved"), method: :patch, class: "btn btn-success me-2"
+      = link_to "Reject", change_status_opportunity_application_path(@opportunity, @application, status: "rejected"), method: :patch, class: "btn btn-danger"
+
+  %hr
+
+  %h3 Messages
+  - if @application.messages.any?
+    %ul.list-group.mb-3
+      - @application.messages.each do |msg|
+        %li.list-group-item
+          %strong= msg.sender_type.capitalize
+          = ": #{msg.body}"
+  - else
+    %p No messages yet.
+
+  = form_with(model: [@opportunity, @application, Message.new], local: true) do |f|
+    .mb-3
+      = f.label :body, "Send a message"
+      = f.text_area :body, class: "form-control", rows: 3
+    = f.submit "Send", class: "btn btn-primary mt-2"
