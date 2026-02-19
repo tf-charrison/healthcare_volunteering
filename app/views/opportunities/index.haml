@@ -1,42 +1,28 @@
 .container.mt-5
-  .row.justify-content-center
-    .col-lg-8.text-center
-      %h1.display-5.fw-bold.mb-3
-        Healthcare Volunteering
+  .d-flex.justify-content-between.align-items-center.mb-4
+    %h1 Available Opportunities
 
-      %p.lead.text-muted.mb-4
-        Find volunteering opportunities or recruit volunteers in healthcare.
+    - if organisation_signed_in?
+      = link_to "Post Opportunity", new_opportunity_path, class: "btn btn-success"
 
-      - if volunteer_signed_in?
-        = link_to "Browse Opportunities", opportunities_path, class: "btn btn-primary btn-lg me-2"
+  - if @opportunities.any?
+    .row.row-cols-1.row-cols-md-2.g-4
+      - @opportunities.each do |opportunity|
+        .col
+          .card.h-100
+            .card-body
+              %h5.card-title= opportunity.title
+              %p.card-text= truncate(opportunity.description, length: 120)
 
-      - if organisation_signed_in?
-        = link_to "Post an Opportunity", new_opportunity_path, class: "btn btn-success btn-lg"
+              %p.mb-1
+                %strong Location:
+                = opportunity.location
 
-  .row.mt-5
-    .col
-      %h2.mb-4.text-center Available d
+              - if opportunity.start_date.present?
+                %p.mb-1
+                  %strong Start:
+                  = opportunity.start_date.strftime("%d %b %Y")
 
-      - if @opportunities.any?
-        .row.row-cols-1.row-cols-md-2.g-4
-          - @opportunities.each do |opportunity|
-            .col
-              .card.h-100
-                .card-body
-                  %h5.card-title= opportunity.title
-                  %p.card-text= truncate(opportunity.description, length: 120)
-                  %p.mb-1
-                    %strong Location: 
-                    = opportunity.location
-                  - if opportunity.start_date.present?
-                    %p.mb-1
-                      %strong Start: 
-                      = opportunity.start_date.strftime("%d %b %Y")
-                  - if opportunity.end_date.present?
-                    %p.mb-1
-                      %strong End: 
-                      = opportunity.end_date.strftime("%d %b %Y")
-                  = link_to "View Details", opportunity_path(opportunity), class: "btn btn-outline-primary mt-2"
-
-      - else
-        %p.text-center.text-muted No opportunities available at the moment.
+              = link_to "View Details", opportunity_path(opportunity), class: "btn btn-outline-primary mt-2"
+  - else
+    %p.text-muted No opportunities available.

@@ -16,14 +16,16 @@
         %ul.navbar-nav.ms-auto
           - if volunteer_signed_in?
             %li.nav-item
+              = link_to "Dashboard", dashboard_path, class: "nav-link"
+            %li.nav-item
               = link_to "Profile", volunteer_profile_path, class: "nav-link"
             %li.nav-item
               = button_to "Logout", destroy_volunteer_session_path, method: :delete, form_class: "d-inline", class: "btn btn-link nav-link"
 
           - elsif organisation_signed_in?
             %li.nav-item
-              = link_to "Dashboard", organisation_profile_path, class: "nav-link"
-              %li.nav-item
+              = link_to "Dashboard", organisation_dashboard_path, class: "nav-link"            
+            %li.nav-item
               = button_to "Logout", destroy_organisation_session_path, method: :delete, form_class: "d-inline", class: "btn btn-link nav-link"
 
           - else

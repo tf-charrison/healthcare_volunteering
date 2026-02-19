@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  root 'opportunities#index'
+  get "dashboard/index"
+  get "home/index"
+  root "home#index"
 
   # Devise routes using custom controllers (only once per model)
   devise_for :volunteers, controllers: {
@@ -14,8 +16,23 @@ Rails.application.routes.draw do
 
   # Opportunities and applications
   resources :opportunities do
-    resources :applications, only: [:create, :index]
+    # Volunteer-facing
+    resources :applications, only: [:new, :create, :show] do
+      patch :change_status, on: :member
+
+      # Messages nested under applications
+      resources :messages, only: [:create]
+    end
+
+    # Organisation-facing: view applications for this opportunity
+    member do
+      get :applications_for_org
+    end
   end
+
+  # Organisation dashboard
+  get "organisation_dashboard", to: "organisations#dashboard"
+  get "dashboard", to: "dashboard#index"
 
   # Profiles
   get   "volunteer_profile",        to: "profiles#volunteer_show"

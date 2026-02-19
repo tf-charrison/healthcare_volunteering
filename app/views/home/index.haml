@@ -1,0 +1,20 @@
+.container.mt-5
+  .row.justify-content-center
+    .col-lg-8.text-center
+      %h1.display-5.fw-bold.mb-3
+        Healthcare Volunteering
+
+      %p.lead.text-muted.mb-4
+        Find volunteering opportunities or recruit volunteers in healthcare.
+
+      - if volunteer_signed_in?
+        = link_to "Browse Opportunities", opportunities_path, class: "btn btn-primary btn-lg me-2"
+
+      - unless volunteer_signed_in?
+        = link_to "Sign Up as Volunteer", new_volunteer_registration_path, class: "btn btn-outline-primary btn-lg me-2"
+
+      - if organisation_signed_in?
+        = link_to "Post an Opportunity", new_opportunity_path, class: "btn btn-success btn-lg"
+
+      - unless organisation_signed_in?
+        = link_to "Register Organisation", new_organisation_registration_path, class: "btn btn-outline-success btn-lg"

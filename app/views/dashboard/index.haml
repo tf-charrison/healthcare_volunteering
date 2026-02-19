@@ -1,0 +1,38 @@
+.container.mt-5
+  %h1 My Applications
+
+  - if @applications.any?
+    %table.table.table-striped.mt-4
+      %thead
+        %tr
+          %th Opportunity
+          %th Organisation
+          %th Status
+          %th Applied On
+          %th Actions
+      %tbody
+        - @applications.each do |application|
+          %tr
+            %td
+              = application.opportunity.title
+
+            %td
+              = application.opportunity.organisation.name
+
+            %td
+              - case application.status
+              - when "approved"
+                %span.badge.bg-success Approved
+              - when "rejected"
+                %span.badge.bg-danger Rejected
+              - else
+                %span.badge.bg-secondary Pending
+
+            %td
+              = application.created_at.strftime("%b %d, %Y")
+
+            %td
+              = link_to "View", opportunity_application_path(application.opportunity, application), class: "btn btn-primary btn-sm"
+  - else
+    %p.mt-4 You haven't applied to any opportunities yet.
+    = link_to "Browse Opportunities", opportunities_path, class: "btn btn-primary mt-2"

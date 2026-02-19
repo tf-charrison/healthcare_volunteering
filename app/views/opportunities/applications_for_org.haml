@@ -1,0 +1,36 @@
+.container.mt-5
+  %h1 Applications for "#{@opportunity.title}"
+
+  - if @applications.any?
+    %table.table.table-bordered
+      %thead
+        %tr
+          %th Volunteer Name
+          %th Email
+          %th Phone
+          %th Availability
+          %th Experience Summary
+          %th Status
+          %th Actions
+      %tbody
+        - @applications.each do |application|
+          %tr
+            %td= "#{application.volunteer.first_name} #{application.volunteer.last_name}"
+            %td= application.volunteer.email
+            %td= application.volunteer.phone_number
+            %td= application.availability
+            %td= application.experience_summary
+            %td
+              - case application.status
+              - when "approved"
+                %span.badge.bg-success Approved
+              - when "rejected"
+                %span.badge.bg-danger Rejected
+              - else
+                %span.badge.bg-secondary Pending
+            %td
+              = link_to "Approve", change_status_opportunity_application_path(@opportunity, application, status: "approved"), method: :patch, class: "btn btn-success btn-sm me-2"
+              = link_to "Reject", change_status_opportunity_application_path(@opportunity, application, status: "rejected"), method: :patch, class: "btn btn-danger btn-sm"
+              = link_to "View", opportunity_application_path(@opportunity, application), class: "btn btn-primary btn-sm ms-2"
+  - else
+    %p No applications yet.

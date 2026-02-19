@@ -10,7 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_06_120351) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_19_161053) do
+  create_table "applications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "volunteer_id", null: false
+    t.bigint "opportunity_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "cover_letter"
+    t.string "availability"
+    t.text "experience_summary"
+    t.integer "status", default: 0, null: false
+    t.index ["opportunity_id"], name: "index_applications_on_opportunity_id"
+    t.index ["volunteer_id"], name: "index_applications_on_volunteer_id"
+  end
+
+  create_table "messages", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "application_id", null: false
+    t.string "sender_type", null: false
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["application_id"], name: "index_messages_on_application_id"
+  end
+
   create_table "opportunities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -34,6 +56,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_06_120351) do
     t.datetime "updated_at", null: false
     t.string "phone_number"
     t.string "address"
+    t.string "name"
+    t.text "description"
+    t.boolean "verified"
     t.index ["email"], name: "index_organisations_on_email", unique: true
     t.index ["reset_password_token"], name: "index_organisations_on_reset_password_token", unique: true
   end
@@ -53,5 +78,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_06_120351) do
     t.index ["reset_password_token"], name: "index_volunteers_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "applications", "opportunities"
+  add_foreign_key "applications", "volunteers"
+  add_foreign_key "messages", "applications"
   add_foreign_key "opportunities", "organisations"
 end
