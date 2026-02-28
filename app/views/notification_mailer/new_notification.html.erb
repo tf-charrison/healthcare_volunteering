@@ -1,0 +1,7 @@
+<p>Hello <%= @notification.recipient.first_name %>,</p>
+
+<p><%= @notification.message %></p>
+
+<% if @notification.link.present? %>
+  <p>Check it out: <%= link_to "View", @notification.link %></p>
+<% end %>

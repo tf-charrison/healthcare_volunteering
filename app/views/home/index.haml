@@ -7,14 +7,20 @@
       %p.lead.text-muted.mb-4
         Find volunteering opportunities or recruit volunteers in healthcare.
 
-      - if volunteer_signed_in?
+      - if volunteer_signed_in? && !organisation_signed_in?
+        = link_to "Browse Organisations", organisations_path, class: "btn btn-primary btn-lg me-2"
         = link_to "Browse Opportunities", opportunities_path, class: "btn btn-primary btn-lg me-2"
+        = link_to "Register Organisation", new_organisation_registration_path, class: "btn btn-outline-success btn-lg ms-2"
 
-      - unless volunteer_signed_in?
+      - if !volunteer_signed_in? && !organisation_signed_in?
         = link_to "Sign Up as Volunteer", new_volunteer_registration_path, class: "btn btn-outline-primary btn-lg me-2"
-
-      - if organisation_signed_in?
-        = link_to "Post an Opportunity", new_opportunity_path, class: "btn btn-success btn-lg"
-
-      - unless organisation_signed_in?
         = link_to "Register Organisation", new_organisation_registration_path, class: "btn btn-outline-success btn-lg"
+
+      - if organisation_signed_in? && !volunteer_signed_in?
+        = link_to "Post an Opportunity", new_opportunity_path, class: "btn btn-success btn-lg"
+        = link_to "Sign Up as Volunteer", new_volunteer_registration_path, class: "btn btn-outline-primary btn-lg ms-2"
+
+      - if volunteer_signed_in? && organisation_signed_in?
+        = link_to "Browse Organisations", organisations_path, class: "btn btn-primary btn-lg me-2"
+        = link_to "Browse Opportunities", opportunities_path, class: "btn btn-primary btn-lg me-2"
+        = link_to "Post an Opportunity", new_opportunity_path, class: "btn btn-success btn-lg ms-2"

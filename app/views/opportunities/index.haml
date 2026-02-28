@@ -5,24 +5,110 @@
     - if organisation_signed_in?
       = link_to "Post Opportunity", new_opportunity_path, class: "btn btn-success"
 
-  - if @opportunities.any?
-    .row.row-cols-1.row-cols-md-2.g-4
-      - @opportunities.each do |opportunity|
-        .col
-          .card.h-100
-            .card-body
-              %h5.card-title= opportunity.title
-              %p.card-text= truncate(opportunity.description, length: 120)
+  / 🔎 Skill Filter Form
+  = form_with url: opportunities_path, method: :get, local: true, class: "row g-3 mb-4" do |f|
+    .col-md-6
+      = f.label :skill, "Filter by Required Skill"
+      = f.text_field :skill,
+          value: params[:skill],
+          class: "form-control",
+          placeholder: "e.g. First Aid"
 
-              %p.mb-1
-                %strong Location:
-                = opportunity.location
+    .col-md-3.d-flex.align-items-end
+      = f.submit "Search", class: "btn btn-primary me-2"
+      = link_to "Reset", opportunities_path, class: "btn btn-secondary"
 
-              - if opportunity.start_date.present?
+  - if volunteer_signed_in?
+    - applied_ids = Application.where(volunteer: current_volunteer).pluck(:opportunity_id)
+    - new_opportunities = @opportunities.reject { |o| applied_ids.include?(o.id) }
+    - applied_opportunities = @opportunities.select { |o| applied_ids.include?(o.id) }
+
+    - if new_opportunities.any?
+      %h3.mb-3 New Opportunities
+      .row.row-cols-1.row-cols-md-2.g-4
+        - new_opportunities.each do |opportunity|
+          .col
+            .card.h-100
+              .card-body
+                %h5.card-title= opportunity.title
+                %p.card-text= truncate(opportunity.description, length: 120)
                 %p.mb-1
-                  %strong Start:
-                  = opportunity.start_date.strftime("%d %b %Y")
+                  %strong Location:
+                  = opportunity.location
+                - if opportunity.start_date.present?
+                  %p.mb-1
+                    %strong Start:
+                    = opportunity.start_date.strftime("%d %b %Y")
+                - if opportunity.skills_required.present?
+                  %p.mb-1
+                    %strong Required Skills:
+                    - opportunity.skills_required.split(",").each do |skill|
+                      %span.badge.bg-info.me-1= skill.strip
+                - score = opportunity.match_score_for(current_volunteer)
+                - if score > 0
+                  %p.mb-2
+                    %span.badge.bg-success= "#{score} Matching Skill#{'s' if score > 1}"
+                - else
+                  %p.mb-2
+                    %span.badge.bg-secondary No Skill Match
+                = link_to "View Details", opportunity_path(opportunity), class: "btn btn-outline-primary mt-2"
 
-              = link_to "View Details", opportunity_path(opportunity), class: "btn btn-outline-primary mt-2"
+    - if applied_opportunities.any?
+      %h3.mb-3 Your Applied Opportunities
+      .row.row-cols-1.row-cols-md-2.g-4
+        - applied_opportunities.each do |opportunity|
+          .col
+            .card.h-100
+              .card-body
+                %h5.card-title= opportunity.title
+                %p.card-text= truncate(opportunity.description, length: 120)
+                %p.mb-1
+                  %strong Location:
+                  = opportunity.location
+                - if opportunity.start_date.present?
+                  %p.mb-1
+                    %strong Start:
+                    = opportunity.start_date.strftime("%d %b %Y")
+                - if opportunity.skills_required.present?
+                  %p.mb-1
+                    %strong Required Skills:
+                    - opportunity.skills_required.split(",").each do |skill|
+                      %span.badge.bg-info.me-1= skill.strip
+                - score = opportunity.match_score_for(current_volunteer)
+                - if score > 0
+                  %p.mb-2
+                    %span.badge.bg-success= "#{score} Matching Skill#{'s' if score > 1}"
+                - else
+                  %p.mb-2
+                    %span.badge.bg-secondary No Skill Match
+                %span.badge.bg-secondary Applied
+                = link_to "View Details", opportunity_path(opportunity), class: "btn btn-outline-primary mt-2"
+
   - else
-    %p.text-muted No opportunities available.
+    - if @opportunities.any?
+      .row.row-cols-1.row-cols-md-2.g-4
+        - @opportunities.each do |opportunity|
+          .col
+            .card.h-100
+              .card-body
+                %h5.card-title= opportunity.title
+                %p.card-text= truncate(opportunity.description, length: 120)
+                %p.mb-1
+                  %strong Location:
+                  = opportunity.location
+                - if opportunity.start_date.present?
+                  %p.mb-1
+                    %strong Start:
+                    = opportunity.start_date.strftime("%d %b %Y")
+                - if opportunity.skills_required.present?
+                  %p.mb-1
+                    %strong Required Skills:
+                    - opportunity.skills_required.split(",").each do |skill|
+                      %span.badge.bg-info.me-1= skill.strip
+                = link_to "View Details", opportunity_path(opportunity), class: "btn btn-outline-primary mt-2"
+    - else
+      %p.text-muted No opportunities available.
+
+  / Back button at the bottom
+  .mt-4
+    = link_to "Back", root_path, class: "btn btn-secondary"

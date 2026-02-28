@@ -1,0 +1,91 @@
+.container.mt-5
+  %h1.text-center.mb-4= @organisation.name
+  %p.text-center.text-muted.mb-4= @organisation.description
+
+  / 🔎 Skill filter
+  = form_with url: opportunities_organisation_path(@organisation), method: :get, local: true, class: "row g-3 mb-4" do |f|
+    .col-md-6
+      = f.label :skill, "Filter by Required Skill"
+      = f.text_field :skill, value: params[:skill], class: "form-control", placeholder: "e.g. First Aid"
+
+    .col-md-3.d-flex.align-items-end
+      = f.submit "Search", class: "btn btn-primary me-2"
+      = link_to "Reset", opportunities_organisation_path(@organisation), class: "btn btn-secondary"
+
+  - if volunteer_signed_in?
+    - applied_opportunity_ids = Application.where(volunteer: current_volunteer).pluck(:opportunity_id)
+    - new_opportunities = @opportunities.reject { |o| applied_opportunity_ids.include?(o.id) }
+    - applied_opportunities = @opportunities.select { |o| applied_opportunity_ids.include?(o.id) }
+
+    - if new_opportunities.any?
+      %h3.mb-3 New Opportunities
+      .row.row-cols-1.row-cols-md-2.g-4
+        - new_opportunities.each do |opportunity|
+          .col
+            .card.h-100
+              .card-body
+                %h5.card-title= opportunity.title
+                %p.card-text= truncate(opportunity.description, length: 120)
+                %p.mb-1
+                  %strong Location:
+                  = opportunity.location
+                - if opportunity.start_date.present?
+                  %p.mb-1
+                    %strong Start:
+                    = opportunity.start_date.strftime("%d %b %Y")
+                - if opportunity.skills_required.present?
+                  %p.mb-1
+                    %strong Required Skills:
+                    - opportunity.skills_required.split(",").each do |skill|
+                      %span.badge.bg-info.me-1= skill.strip
+                = link_to "View Details", opportunity_path(opportunity), class: "btn btn-outline-primary mt-2"
+
+    - if applied_opportunities.any?
+      %h3.mb-3 Your Applied Opportunities
+      .row.row-cols-1.row-cols-md-2.g-4
+        - applied_opportunities.each do |opportunity|
+          .col
+            .card.h-100
+              .card-body
+                %h5.card-title= opportunity.title
+                %p.card-text= truncate(opportunity.description, length: 120)
+                %p.mb-1
+                  %strong Location:
+                  = opportunity.location
+                - if opportunity.start_date.present?
+                  %p.mb-1
+                    %strong Start:
+                    = opportunity.start_date.strftime("%d %b %Y")
+                - if opportunity.skills_required.present?
+                  %p.mb-1
+                    %strong Required Skills:
+                    - opportunity.skills_required.split(",").each do |skill|
+                      %span.badge.bg-info.me-1= skill.strip
+                %span.badge.bg-secondary Applied
+                = link_to "View Details", opportunity_path(opportunity), class: "btn btn-outline-primary mt-2"
+
+  - else
+    -# If no volunteer signed in, just show all opportunities
+    - if @opportunities.any?
+      .row.row-cols-1.row-cols-md-2.g-4
+        - @opportunities.each do |opportunity|
+          .col
+            .card.h-100
+              .card-body
+                %h5.card-title= opportunity.title
+                %p.card-text= truncate(opportunity.description, length: 120)
+                %p.mb-1
+                  %strong Location:
+                  = opportunity.location
+                - if opportunity.start_date.present?
+                  %p.mb-1
+                    %strong Start:
+                    = opportunity.start_date.strftime("%d %b %Y")
+                - if opportunity.skills_required.present?
+                  %p.mb-1
+                    %strong Required Skills:
+                    - opportunity.skills_required.split(",").each do |skill|
+                      %span.badge.bg-info.me-1= skill.strip
+                = link_to "View Details", opportunity_path(opportunity), class: "btn btn-outline-primary mt-2"
+    - else
+      %p.text-muted No opportunities available.

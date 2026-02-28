@@ -5,7 +5,9 @@
     = csp_meta_tag
 
     = stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload"
+    = stylesheet_link_tag "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css", media: "all", "data-turbo-track": "reload"
     = javascript_importmap_tags
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
 
   %body
     / Navbar
@@ -16,7 +18,7 @@
         %ul.navbar-nav.ms-auto
           - if volunteer_signed_in?
             %li.nav-item
-              = link_to "Dashboard", dashboard_path, class: "nav-link"
+              = link_to "My Applications", dashboard_path, class: "nav-link"
             %li.nav-item
               = link_to "Profile", volunteer_profile_path, class: "nav-link"
             %li.nav-item
@@ -24,7 +26,11 @@
 
           - elsif organisation_signed_in?
             %li.nav-item
-              = link_to "Dashboard", organisation_dashboard_path, class: "nav-link"            
+              = link_to "Our Opportunities", organisation_dashboard_path, class: "nav-link"
+            %li.nav-item
+              = link_to "Profile", organisation_profile_path, class: "nav-link"
+            %li.nav-item
+              = link_to "Insights", insights_path, class: "nav-link"        
             %li.nav-item
               = button_to "Logout", destroy_organisation_session_path, method: :delete, form_class: "d-inline", class: "btn btn-link nav-link"
 
@@ -38,6 +44,27 @@
             %li.nav-item
               = link_to "Organisation Sign In", new_organisation_session_path, class: "nav-link"
 
+    / Expiring Opportunities Alerts
+    - if @expiring_opportunities.present?
+      .container.mt-3
+        - @expiring_opportunities.each do |opportunity|
+          .alert.alert-warning.alert-dismissible.fade.show{ role: "alert" }
+            %strong Expiring Soon! 
+            = "The opportunity \"#{opportunity.title}\" is expiring on #{opportunity.expiry_date.strftime('%d %b %Y')}."
+            = link_to "View Opportunity", opportunity_path(opportunity), class: "alert-link"
+            %button.btn-close{ type: "button", "data-bs-dismiss" => "alert", "aria-label" => "Close" }
+
+    / In-App Notifications Alerts
+    - if @notifications.present?
+      .container.mt-3
+        - @notifications.each do |notification|
+          .alert.alert-info.alert-dismissible.fade.show{ role: "alert" }
+            %strong New! 
+            = notification.message
+            - if notification.link.present?
+              = " "
+              = link_to "View", notification.link, class: "alert-link"
+            %button.btn-close{ type: "button", "data-bs-dismiss" => "alert", "aria-label" => "Close" }
 
     / Flash messages + main content
     .container.mt-4

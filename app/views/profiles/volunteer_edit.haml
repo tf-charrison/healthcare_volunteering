@@ -17,6 +17,30 @@
       = f.label :phone_number
       = f.telephone_field :phone_number, class: "form-control"
     .mb-3
+      = f.label :skills, "Skills (comma separated)"
+      = f.text_field :skills, class: "form-control", placeholder: "First Aid, Patient Care, Admin"
+    .mb-3
+      = f.label :experience, "Experience"
+      = f.text_area :experience, class: "form-control", rows: 3
+    .mb-3
+      = f.label :availability, "Availability"
+      = f.select :availability, ["Weekdays", "Weekends", "Evenings", "Flexible", "Full-time", "Part-time"], { include_blank: "Select availability" }, class: "form-control"
+    .mb-3
+      = f.label :cpr_certified
+      = f.check_box :cpr_certified
+
+    .mb-3
+      = f.label :first_aid_certified
+      = f.check_box :first_aid_certified
+
+    .mb-3
+      = f.label :hipaa_trained
+      = f.check_box :hipaa_trained
+
+    .mb-3
+      = f.label :background_checked
+      = f.check_box :background_checked   
+    .mb-3
       = f.label :password, "New Password"
       = f.password_field :password, class: "form-control", autocomplete: "new-password"
     .mb-3

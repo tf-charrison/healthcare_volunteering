@@ -48,10 +48,10 @@ class ProfilesController < ApplicationController
   private
 
   def volunteer_params
-    params.require(:volunteer).permit(:email, :first_name, :last_name, :phone_number, :password, :password_confirmation)
+    params.require(:volunteer).permit(:email, :first_name, :last_name, :phone_number, :password, :password_confirmation, :experience, :skills, :availability, :cpr_certified, :first_aid_certified, :hipaa_trained, :background_checked)
   end
 
   def organisation_params
-    params.require(:organisation).permit(:email, :name, :phone_number, :address)
+    params.require(:organisation).permit(:email, :name, :phone_number, :address, :location)
   end
 end

@@ -1,0 +1,102 @@
+.container.mt-5
+  %h1 Volunteer Search
+
+  / 🔎 Filter Form
+  = form_with url: volunteers_organisations_path, method: :get, local: true, class: "mb-4" do |f|
+
+    / First row: Email / ID
+    .row.g-3.mb-3
+      .col-md-4
+        = f.label :email, "Search by Email"
+        = f.text_field :email,
+            value: params[:email],
+            class: "form-control",
+            placeholder: "volunteer@example.com"
+
+      .col-md-4
+        = f.label :id, "Search by Volunteer ID"
+        = f.number_field :id,
+            value: params[:id],
+            class: "form-control",
+            placeholder: "e.g. 123"
+
+    / Second row: Skills, Experience, Availability
+    .row.g-3
+      .col-md-3
+        = f.label :skill, "Filter by Skill"
+        = f.text_field :skill,
+            value: params[:skill],
+            class: "form-control",
+            placeholder: "e.g. First Aid"
+
+      .col-md-3
+        = f.label :experience, "Filter by Experience"
+        = f.text_field :experience,
+            value: params[:experience],
+            class: "form-control",
+            placeholder: "e.g. Nursing, CPR"
+
+      .col-md-3
+        = f.label :availability, "Filter by Availability"
+        = f.select :availability,
+            ["Weekdays", "Weekends", "Evenings", "Flexible", "Full-time", "Part-time"],
+            { include_blank: "All Availability" },
+            class: "form-control",
+            selected: params[:availability]
+
+    / Third row: Certifications / Compliance
+    .row.mt-3
+      .col-md-3
+        .form-check
+          = f.check_box :cpr_certified, class: "form-check-input"
+          = f.label :cpr_certified, "CPR Certified", class: "form-check-label"
+
+      .col-md-3
+        .form-check
+          = f.check_box :hipaa_trained, class: "form-check-input"
+          = f.label :hipaa_trained, "HIPAA Trained", class: "form-check-label"
+
+      .col-md-3
+        .form-check
+          = f.check_box :first_aid_certified, class: "form-check-input"
+          = f.label :first_aid_certified, "First aid certified", class: "form-check-label"
+
+      .col-md-3
+        .form-check
+          = f.check_box :background_checked, class: "form-check-input"
+          = f.label :background_checked, "Background Checked", class: "form-check-label"
+
+    .mt-3
+      = f.submit "Search", class: "btn btn-primary me-2"
+      = link_to "Reset", volunteers_organisations_path, class: "btn btn-secondary"
+      - if @volunteers.any?
+        = link_to "Export CSV", export_volunteers_organisations_path(request.query_parameters), class: "btn btn-success ms-2"
+
+  - if @volunteers.any?
+    .table-responsive
+      %table.table.table-striped
+        %thead
+          %tr
+            %th Name
+            %th Email
+            %th Phone
+            %th Skills
+            %th Experience
+            %th Availability
+            %th CPR
+            %th HIPAA
+            %th Background
+        %tbody
+          - @volunteers.each do |volunteer|
+            %tr
+              %td= "#{volunteer.first_name} #{volunteer.last_name}"
+              %td= volunteer.email
+              %td= volunteer.phone_number
+              %td= volunteer.skills
+              %td= volunteer.experience
+              %td= volunteer.availability
+              %td= volunteer.cpr_certified ? "✔️" : "✖️"
+              %td= volunteer.hipaa_trained ? "✔️" : "✖️"
+              %td= volunteer.background_checked ? "✔️" : "✖️"
+  - else
+    %p.text-muted No volunteers match your criteria.

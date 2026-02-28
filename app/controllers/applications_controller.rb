@@ -9,15 +9,24 @@ class ApplicationsController < ApplicationController
   # Allow either volunteer or organisation for show
   before_action :authenticate_user!, only: [:show]
 
-  # GET /opportunities/:opportunity_id/applications
   def index
-    # Only allow the organisation who owns the opportunity to view applications
-    unless current_organisation == @opportunity.organisation
-      redirect_to root_path, alert: "You are not authorized to view these applications."
-      return
+    @opportunity = Opportunity.find(params[:opportunity_id])
+    @applications = @opportunity.applications.includes(:volunteer)
+
+    if params[:skill].present?
+      @applications = @applications.joins(:volunteer)
+        .where("LOWER(volunteers.skills) LIKE ?", "%#{params[:skill].downcase}%")
     end
 
-    @applications = @opportunity.applications.includes(:volunteer)
+    if params[:experience].present?
+      @applications = @applications.joins(:volunteer)
+        .where("LOWER(volunteers.experience) LIKE ?", "%#{params[:experience].downcase}%")
+    end
+
+    # Sort by skill match strength
+    @applications = @applications.sort_by do |application|
+      -@opportunity.match_score_for(application.volunteer)
+    end
   end
 
   # GET /opportunities/:opportunity_id/applications/:id
@@ -49,8 +58,11 @@ class ApplicationsController < ApplicationController
     end
   end
 
-  # PATCH /opportunities/:opportunity_id/applications/:id/change_status
+
   def change_status
+    @opportunity = Opportunity.find(params[:opportunity_id])
+    @application = Application.find(params[:id])
+
     # Only organisation owning the opportunity can change status
     unless @opportunity.organisation == current_organisation
       redirect_to opportunities_path, alert: "Not authorized"
@@ -58,12 +70,18 @@ class ApplicationsController < ApplicationController
     end
 
     if @application.update(status: params[:status])
-      redirect_to opportunity_applications_path(@opportunity), notice: "Application updated."
-    else
-      redirect_to opportunity_applications_path(@opportunity), alert: "Could not update application."
-    end
-  end
+      # Create an update for the volunteer to see
+      ApplicationUpdate.create!(
+        application: @application,
+        message: "Your application has been #{params[:status]}.",
+        user: current_organisation # <-- associate the organisation
+      )
 
+      redirect_to applications_for_org_opportunity_path(@opportunity), notice: "Application updated."
+    else
+      redirect_to applications_for_org_opportunity_path(@opportunity), alert: "Could not update application."
+    end
+  end  
   private
 
   def set_opportunity
@@ -78,7 +96,7 @@ class ApplicationsController < ApplicationController
     params.require(:application).permit(
       :cover_letter,
       :availability,
-      :experience_summary
+      :experience
     )
   end
 

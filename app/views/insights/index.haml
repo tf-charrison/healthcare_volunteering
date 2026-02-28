@@ -1,0 +1,48 @@
+.container.mt-5
+  %h1.mb-4.text-center Insights Dashboard
+
+  .row.mb-4
+    .col-md-3
+      .card.text-white.bg-primary.mb-3
+        .card-body
+          %div.d-flex.align-items-center
+            %i.bi.bi-people-fill.fs-1.me-3
+            %div
+              %h5.card-title Total Volunteers
+              %p.card-text.fs-4= @total_volunteers
+    .col-md-3
+      .card.text-white.bg-success.mb-3
+        .card-body
+          %div.d-flex.align-items-center
+            %i.bi.bi-person-check-fill.fs-1.me-3
+            %div
+              %h5.card-title Active Volunteers
+              %p.card-text.fs-4= @active_volunteers
+    .col-md-3
+      .card.text-white.bg-info.mb-3
+        .card-body
+          %div.d-flex.align-items-center
+            %i.bi.bi-briefcase-fill.fs-1.me-3
+            %div
+              %h5.card-title Total Opportunities
+              %p.card-text.fs-4= @total_opportunities
+    .col-md-3
+      .card.text-white.bg-warning.mb-3
+        .card-body
+          %div.d-flex.align-items-center
+            %i.bi.bi-check2-circle.fs-1.me-3
+            %div
+              %h5.card-title Completed Tasks
+              %p.card-text.fs-4= @completed_tasks
+
+  .row.mt-4
+    .col-md-6
+      .card.mb-3
+        .card-body
+          %h5.card-title Matched Opportunities
+          %canvas#matchedOpportunitiesChart{height: "200"}
+    .col-md-6
+      .card.mb-3
+        .card-body
+          %h5.card-title Volunteer Signups (last 30 days)
+          %canvas#volunteerSignupChart{height: "200"}

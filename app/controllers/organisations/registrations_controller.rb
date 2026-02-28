@@ -1,5 +1,15 @@
 # app/controllers/organisations/registrations_controller.rb
 class Organisations::RegistrationsController < Devise::RegistrationsController
+  # GET /organisations/sign_up
+  def new
+    super
+  end
+
+  # POST /organisations
+  def create
+    super
+  end
+
   private
 
   # Permit extra fields for sign up / account update

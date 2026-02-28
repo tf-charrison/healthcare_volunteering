@@ -32,7 +32,8 @@
               = application.created_at.strftime("%b %d, %Y")
 
             %td
-              = link_to "View", opportunity_application_path(application.opportunity, application), class: "btn btn-primary btn-sm"
+              = link_to "View Opportunity", opportunity_application_path(application.opportunity, application), class: "btn btn-secondary btn-sm me-1"
+              = link_to "View Updates", opportunity_application_application_updates_path(application.opportunity, application), class: "btn btn-primary btn-sm"
   - else
     %p.mt-4 You haven't applied to any opportunities yet.
     = link_to "Browse Opportunities", opportunities_path, class: "btn btn-primary mt-2"

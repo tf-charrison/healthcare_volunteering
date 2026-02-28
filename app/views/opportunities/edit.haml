@@ -37,5 +37,5 @@
           = f.text_field :skills_required, class: "form-control", placeholder: "e.g., CPR, Patient Care"
 
         .d-flex.justify-content-between.mt-4
-          = link_to "Back to Dashboard", organisation_profile_path, class: "btn btn-secondary"
+          = link_to "Back", applications_for_org_opportunity_path(@opportunity), class: "btn btn-secondary"
           = f.submit "Create Opportunity", class: "btn btn-success"

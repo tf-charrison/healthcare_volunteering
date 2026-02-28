@@ -1,9 +1,10 @@
 class Volunteer < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+  devise :two_factor_authenticatable, :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, otp_secret_encryption_key: Rails.application.credentials.otp_secret_key
 
   has_many :applications, dependent: :destroy
   has_many :applied_opportunities, through: :applications, source: :opportunity
+  has_many :notifications, as: :recipient, dependent: :destroy
+
 end

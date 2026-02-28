@@ -12,8 +12,8 @@
       = f.text_field :availability, class: "form-control", placeholder: "e.g. Weekends, Evenings"
 
     .mb-3
-      = f.label :experience_summary, "Relevant Experience"
-      = f.text_area :experience_summary, class: "form-control", rows: 4
+      = f.label :experience, "Relevant Experience"
+      = f.text_area :experience, class: "form-control", rows: 4
 
     = f.submit "Submit Application", class: "btn btn-primary"
     = link_to "Back", opportunity_path(@opportunity), class: "btn btn-secondary ms-2"

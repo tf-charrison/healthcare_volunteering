@@ -14,4 +14,8 @@
       %tr
         %th Address
         %td= @organisation.address
+      %tr
+        %th Location
+        %td= @organisation.location
+
   = link_to "Edit Profile", edit_organisation_profile_path, class: "btn btn-success mt-3"
