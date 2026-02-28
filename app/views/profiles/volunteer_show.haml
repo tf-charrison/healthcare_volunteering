@@ -14,4 +14,8 @@
       %tr
         %th Phone Number
         %td= @volunteer.phone_number
+      %tr
+        %th Skills
+        %td= @volunteer.skills
+
   = link_to "Edit Profile", volunteer_profile_edit_path, class: "btn btn-primary mt-3"

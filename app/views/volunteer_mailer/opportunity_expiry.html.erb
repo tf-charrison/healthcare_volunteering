@@ -1,0 +1,5 @@
+<p>Hello <%= @volunteer.first_name %>,</p>
+
+<p>The opportunity "<%= @opportunity.title %>" is about to expire on <%= @opportunity.expiry_date.strftime("%d %b %Y") %>.</p>
+
+<p>Check it out: <%= link_to 'View Opportunity', opportunity_url(@opportunity) %></p>

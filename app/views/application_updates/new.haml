@@ -1,0 +1,8 @@
+.container.mt-5
+  %h1.mb-4 Add Update for Application
+  = form_with model: [@application, @update], local: true do |f|
+    .mb-3
+      = f.label :message
+      = f.text_area :message, class: "form-control", rows: 5
+
+    = f.submit "Save Update", class: "btn btn-success mt-2"

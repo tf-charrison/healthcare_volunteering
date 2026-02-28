@@ -1,6 +1,26 @@
 .container.mt-5
   %h1 Applications for "#{@opportunity.title}"
 
+  / 🔎 Filter Volunteers
+  = form_with url: opportunity_applications_path(@opportunity), method: :get, local: true, class: "row g-3 mb-4" do |f|
+    .col-md-6
+      = f.label :skill, "Filter by Skill"
+      = f.text_field :skill,
+          value: params[:skill],
+          class: "form-control",
+          placeholder: "e.g. First Aid"
+
+    .col-md-6
+      = f.label :experience, "Filter by Experience"
+      = f.text_field :experience,
+          value: params[:experience],
+          class: "form-control",
+          placeholder: "e.g. Nursing"
+
+    .col-12
+      = f.submit "Search Volunteers", class: "btn btn-primary me-2"
+      = link_to "Reset", opportunity_applications_path(@opportunity), class: "btn btn-secondary"
+
   - if @applications.any?
     %table.table.table-bordered
       %thead
@@ -11,6 +31,7 @@
           %th Availability
           %th Experience Summary
           %th Status
+          %th Skill Match
           %th Actions
       %tbody
         - @applications.each do |application|
@@ -19,7 +40,7 @@
             %td= application.volunteer.email
             %td= application.volunteer.phone_number
             %td= application.availability
-            %td= application.experience_summary
+            %td= application.volunteer.experience
             %td
               - case application.status
               - when "approved"
@@ -29,8 +50,17 @@
               - else
                 %span.badge.bg-secondary Pending
             %td
-              = link_to "Approve", update_status_opportunity_application_path(@opportunity, application, status: "approved"), method: :patch, class: "btn btn-success btn-sm me-2"
-              = link_to "Reject", update_status_opportunity_application_path(@opportunity, application, status: "rejected"), method: :patch, class: "btn btn-danger btn-sm"
+              - score = @opportunity.match_score_for(application.volunteer)
+              - if score > 0
+                %span.badge.bg-success
+                  = "#{score} Skill Match#{'es' if score > 1}"
+              - else
+                %span.badge.bg-secondary No Match
+            %td
+              - if organisation_signed_in?
+                - if application.status == "pending"
+                  = link_to "Approve", change_status_opportunity_application_path(@opportunity, application, status: "approved"), method: :patch, class: "btn btn-success btn-sm me-2"
+                  = link_to "Reject", change_status_opportunity_application_path(@opportunity, application, status: "rejected"), method: :patch, class: "btn btn-danger btn-sm"
               = link_to "View", opportunity_application_path(@opportunity, application), class: "btn btn-primary btn-sm ms-2"
   - else
     %p No applications yet.

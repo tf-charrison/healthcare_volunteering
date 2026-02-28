@@ -1,15 +1,53 @@
 .container.mt-5
   %h1 Applications for "#{@opportunity.title}"
 
+  / 🔎 Volunteer Filter Form
+  = form_with url: applications_for_org_opportunity_path(@opportunity), method: :get, local: true, class: "mb-4" do |f|
+    .row.g-3
+      .col-md-6
+        = f.label :skill, "Filter by Skill"
+        = f.select :skill,
+          options_for_select(Volunteer.distinct.pluck(:skills).compact.map(&:split).flatten.uniq.sort, params[:skill]),
+          { include_blank: "All Skills" },
+          class: "form-control"
+
+      .col-md-6
+        = f.label :experience, "Filter by Experience"
+        = f.select :experience,
+          options_for_select(Volunteer.distinct.pluck(:experience).compact.uniq.sort, params[:experience]),
+          { include_blank: "All Experience Levels" },
+          class: "form-control"
+
+    / ✅ Compliance Row
+    .row.mt-3
+      .col-md-4
+        .form-check
+          = f.check_box :cpr_certified, class: "form-check-input"
+          = f.label :cpr_certified, "CPR Certified", class: "form-check-label"
+
+      .col-md-4
+        .form-check
+          = f.check_box :hipaa_trained, class: "form-check-input"
+          = f.label :hipaa_trained, "HIPAA Trained", class: "form-check-label"
+
+      .col-md-4
+        .form-check
+          = f.check_box :background_checked, class: "form-check-input"
+          = f.label :background_checked, "Background Checked", class: "form-check-label"
+
+    .mt-3
+      = f.submit "Filter", class: "btn btn-primary me-2"
+      = link_to "Reset", applications_for_org_opportunity_path(@opportunity), class: "btn btn-secondary"
+
   - if @applications.any?
-    %table.table.table-bordered
+    %table.table.table-bordered.mt-4
       %thead
         %tr
           %th Volunteer Name
           %th Email
           %th Phone
           %th Availability
-          %th Experience Summary
+          %th Experience
           %th Status
           %th Actions
       %tbody
@@ -19,7 +57,7 @@
             %td= application.volunteer.email
             %td= application.volunteer.phone_number
             %td= application.availability
-            %td= application.experience_summary
+            %td= application.volunteer.experience
             %td
               - case application.status
               - when "approved"
@@ -29,8 +67,19 @@
               - else
                 %span.badge.bg-secondary Pending
             %td
-              = link_to "Approve", change_status_opportunity_application_path(@opportunity, application, status: "approved"), method: :patch, class: "btn btn-success btn-sm me-2"
-              = link_to "Reject", change_status_opportunity_application_path(@opportunity, application, status: "rejected"), method: :patch, class: "btn btn-danger btn-sm"
-              = link_to "View", opportunity_application_path(@opportunity, application), class: "btn btn-primary btn-sm ms-2"
+              - if application.status == "pending"
+                / Approve button
+                = form_with url: change_status_opportunity_application_path(@opportunity, application, status: "approved"), method: :patch, local: true, class: "d-inline" do
+                  = submit_tag "Approve", class: "btn btn-success btn-sm me-2"
+
+                / Reject button
+                = form_with url: change_status_opportunity_application_path(@opportunity, application, status: "rejected"), method: :patch, local: true, class: "d-inline" do
+                  = submit_tag "Reject", class: "btn btn-danger btn-sm me-2"
+
+              / View Opportunity button
+              = link_to "View Opportunity", opportunity_path(@opportunity), class: "btn btn-secondary btn-sm me-2"
+              - if volunteer_signed_in?
+                / View Updates button
+                = link_to "View Updates", opportunity_application_application_updates_path(@opportunity, application), class: "btn btn-primary btn-sm"
   - else
-    %p No applications yet.
+    %p.text-muted No applications yet.

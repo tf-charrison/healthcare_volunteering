@@ -25,7 +25,6 @@
     = @opportunity.skills_required
 
 .mt-4.d-flex.gap-2.flex-wrap
-
   - if volunteer_signed_in?
     - if @opportunity.volunteers.include?(current_volunteer)
       %span.badge.bg-secondary.align-self-center Applied
@@ -35,3 +34,5 @@
   - if organisation_signed_in? && @opportunity.organisation == current_organisation
     = link_to "Edit", edit_opportunity_path(@opportunity), class: "btn btn-warning"
     = link_to "Delete", opportunity_path(@opportunity), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger"
+
+  = link_to "Back", opportunities_path, class: "btn btn-secondary"

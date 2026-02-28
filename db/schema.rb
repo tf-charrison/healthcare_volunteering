@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_19_161053) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_28_011817) do
+  create_table "application_updates", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "application_id", null: false
+    t.string "user_type"
+    t.integer "user_id"
+    t.text "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["application_id"], name: "index_application_updates_on_application_id"
+  end
+
   create_table "applications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "volunteer_id", null: false
     t.bigint "opportunity_id", null: false
@@ -18,7 +28,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_19_161053) do
     t.datetime "updated_at", null: false
     t.text "cover_letter"
     t.string "availability"
-    t.text "experience_summary"
     t.integer "status", default: 0, null: false
     t.index ["opportunity_id"], name: "index_applications_on_opportunity_id"
     t.index ["volunteer_id"], name: "index_applications_on_volunteer_id"
@@ -33,6 +42,17 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_19_161053) do
     t.index ["application_id"], name: "index_messages_on_application_id"
   end
 
+  create_table "notifications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "recipient_type", null: false
+    t.bigint "recipient_id", null: false
+    t.string "message"
+    t.string "link"
+    t.boolean "read"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient"
+  end
+
   create_table "opportunities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -43,6 +63,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_19_161053) do
     t.date "start_date"
     t.date "end_date"
     t.string "skills_required"
+    t.date "expiry_date"
     t.index ["organisation_id"], name: "index_opportunities_on_organisation_id"
   end
 
@@ -59,6 +80,11 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_19_161053) do
     t.string "name"
     t.text "description"
     t.boolean "verified"
+    t.string "otp_secret"
+    t.integer "consumed_timestep"
+    t.boolean "otp_required_for_login"
+    t.text "otp_backup_codes"
+    t.string "location"
     t.index ["email"], name: "index_organisations_on_email", unique: true
     t.index ["reset_password_token"], name: "index_organisations_on_reset_password_token", unique: true
   end
@@ -74,10 +100,22 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_19_161053) do
     t.string "first_name"
     t.string "last_name"
     t.string "phone_number"
+    t.string "skills"
+    t.text "experience"
+    t.string "availability"
+    t.boolean "cpr_certified"
+    t.boolean "first_aid_certified"
+    t.boolean "hipaa_trained"
+    t.boolean "background_checked"
+    t.string "otp_secret"
+    t.integer "consumed_timestep"
+    t.boolean "otp_required_for_login"
+    t.text "otp_backup_codes"
     t.index ["email"], name: "index_volunteers_on_email", unique: true
     t.index ["reset_password_token"], name: "index_volunteers_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "application_updates", "applications"
   add_foreign_key "applications", "opportunities"
   add_foreign_key "applications", "volunteers"
   add_foreign_key "messages", "applications"
