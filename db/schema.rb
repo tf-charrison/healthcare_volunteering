@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_28_011817) do
+ActiveRecord::Schema[7.2].define(version: 2026_03_04_115754) do
   create_table "application_updates", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "application_id", null: false
     t.string "user_type"
@@ -31,6 +31,33 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_28_011817) do
     t.integer "status", default: 0, null: false
     t.index ["opportunity_id"], name: "index_applications_on_opportunity_id"
     t.index ["volunteer_id"], name: "index_applications_on_volunteer_id"
+  end
+
+  create_table "community_likes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "volunteer_id", null: false
+    t.bigint "community_post_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["community_post_id"], name: "index_community_likes_on_community_post_id"
+    t.index ["volunteer_id"], name: "index_community_likes_on_volunteer_id"
+  end
+
+  create_table "community_posts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "volunteer_id", null: false
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["volunteer_id"], name: "index_community_posts_on_volunteer_id"
+  end
+
+  create_table "community_replies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "community_post_id", null: false
+    t.bigint "volunteer_id", null: false
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["community_post_id"], name: "index_community_replies_on_community_post_id"
+    t.index ["volunteer_id"], name: "index_community_replies_on_volunteer_id"
   end
 
   create_table "messages", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -118,6 +145,11 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_28_011817) do
   add_foreign_key "application_updates", "applications"
   add_foreign_key "applications", "opportunities"
   add_foreign_key "applications", "volunteers"
+  add_foreign_key "community_likes", "community_posts"
+  add_foreign_key "community_likes", "volunteers"
+  add_foreign_key "community_posts", "volunteers"
+  add_foreign_key "community_replies", "community_posts"
+  add_foreign_key "community_replies", "volunteers"
   add_foreign_key "messages", "applications"
   add_foreign_key "opportunities", "organisations"
 end

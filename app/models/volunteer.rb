@@ -6,5 +6,7 @@ class Volunteer < ApplicationRecord
   has_many :applications, dependent: :destroy
   has_many :applied_opportunities, through: :applications, source: :opportunity
   has_many :notifications, as: :recipient, dependent: :destroy
-
+  has_many :community_posts
+  has_many :community_replies
+  has_many :community_likes
 end

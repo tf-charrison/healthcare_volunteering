@@ -15,11 +15,15 @@ Rails.application.routes.draw do
     sessions: 'organisations/sessions'
   }
 
-  # config/routes.rb
-  devise_scope :organisation do
-    get 'organisations/sign_up', to: 'organisations/registrations#new', as: 'new_organisation_registration'
-    post 'organisations', to: 'organisations/registrations#create', as: 'organisation_registration'
+  get "help", to: "pages#help"
+
+  resources :community_posts, only: [:index, :create] do
+    resources :community_replies, only: [:create]
+
+    post "like", to: "community_likes#create"
   end
+
+  # config/routes.rb
 
   get 'insights', to: 'insights#index', as: :insights
 

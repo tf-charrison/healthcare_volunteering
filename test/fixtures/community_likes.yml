@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  volunteer: one
+  community_post: one
+
+two:
+  volunteer: two
+  community_post: two
