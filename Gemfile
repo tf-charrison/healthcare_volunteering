@@ -42,7 +42,7 @@ gem 'haml'
 
 gem 'sassc-rails'
 
-gem "bootstrap", "~> 5.3.2"
+gem "bootstrap", "~> 5.3.8"
 
 gem 'devise-two-factor'
 
