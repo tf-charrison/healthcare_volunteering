@@ -2,5 +2,6 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 import "@rails/ujs"    // <-- Make sure this line is present
+chart.js
 
 Rails.start()

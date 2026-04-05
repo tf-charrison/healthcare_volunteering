@@ -9,7 +9,7 @@
 
     .col-md-4
       = f.label :location, "Search by Location"
-      = f.text_field :location, value: params[:location], class: "form-control", placeholder: "City, State"
+      = f.text_field :location, value: params[:location], class: "form-control", placeholder: "City"
 
     .col-md-4.d-flex.align-items-end
       = f.submit "Search", class: "btn btn-primary me-2"

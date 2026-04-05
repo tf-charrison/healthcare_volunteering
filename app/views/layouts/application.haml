@@ -22,6 +22,10 @@
             %li.nav-item
               = link_to "Profile", volunteer_profile_path, class: "nav-link"
             %li.nav-item
+              = link_to "Community", community_posts_path, class: "nav-link"
+            %li.nav-item
+              = link_to "Help", help_path, class: "nav-link"
+            %li.nav-item
               = button_to "Logout", destroy_volunteer_session_path, method: :delete, form_class: "d-inline", class: "btn btn-link nav-link"
 
           - elsif organisation_signed_in?
@@ -30,7 +34,9 @@
             %li.nav-item
               = link_to "Profile", organisation_profile_path, class: "nav-link"
             %li.nav-item
-              = link_to "Insights", insights_path, class: "nav-link"        
+              = link_to "Insights", insights_path, class: "nav-link"
+            %li.nav-item
+              = link_to "Help", help_path, class: "nav-link"
             %li.nav-item
               = button_to "Logout", destroy_organisation_session_path, method: :delete, form_class: "d-inline", class: "btn btn-link nav-link"
 
@@ -75,3 +81,9 @@
       .row.justify-content-center
         .col-lg-10
           = yield
+
+    / ✅ Bootstrap JS (required for accordion, collapse, dropdowns, modals)
+    %script{ src: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" }
+
+    / ✅ Chart.js added here
+    %script{ src: "https://cdn.jsdelivr.net/npm/chart.js" }

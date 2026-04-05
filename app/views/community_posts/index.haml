@@ -1,0 +1,59 @@
+.container.mt-5
+  %h1.mb-4 Volunteer Community
+
+  / ----------------------------
+  / Create New Post
+  / ----------------------------
+  = form_with model: @post, url: community_posts_path, local: true do |f|
+    .mb-3
+      = f.text_area :content,
+        class: "form-control",
+        placeholder: "Share something with the community...",
+        rows: 3
+    = f.submit "Post", class: "btn btn-primary mb-4"
+
+  / ----------------------------
+  / Posts List
+  / ----------------------------
+  - @posts.each do |post|
+    .card.mb-4
+      .card-body
+        / Post Header
+        %div.d-flex.justify-content-between
+          %div
+            %strong= post.volunteer.first_name
+            %small.text-muted.ms-2= post.created_at.strftime("%d %b %Y %H:%M")
+
+        / Post Content
+        %p.mt-3= post.content
+
+        / ----------------------------
+        / Like Section
+        / ----------------------------
+        .mt-2
+          - liked = post.community_likes.exists?(volunteer: current_volunteer)
+          = button_to "👍 #{post.community_likes.count}",
+              community_post_like_path(post),
+              method: :post,
+              class: "btn btn-sm #{liked ? 'btn-success' : 'btn-outline-success'}"
+
+        %hr
+
+        / ----------------------------
+        / Replies
+        / ----------------------------
+        - post.community_replies.each do |reply|
+          .ms-4.mb-3
+            %strong= reply.volunteer.first_name
+            %small.text-muted.ms-2= reply.created_at.strftime("%d %b %Y %H:%M")
+            %p.mt-1= reply.content
+
+        / ----------------------------
+        / Reply Form
+        / ----------------------------
+        = form_with model: [post, CommunityReply.new], local: true do |f|
+          .input-group.mt-2
+            = f.text_field :content,
+              class: "form-control",
+              placeholder: "Write a reply..."
+            %button.btn.btn-outline-secondary Reply

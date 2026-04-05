@@ -1,9 +1,9 @@
 .container.mt-5
   %h1.mb-4.text-center Insights Dashboard
 
-  .row.mb-4
+  .row.mb-4.d-flex.align-items-stretch
     .col-md-3
-      .card.text-white.bg-primary.mb-3
+      .card.text-white.bg-primary.mb-3.h-100
         .card-body
           %div.d-flex.align-items-center
             %i.bi.bi-people-fill.fs-1.me-3
@@ -11,7 +11,7 @@
               %h5.card-title Total Volunteers
               %p.card-text.fs-4= @total_volunteers
     .col-md-3
-      .card.text-white.bg-success.mb-3
+      .card.text-white.bg-success.mb-3.h-100
         .card-body
           %div.d-flex.align-items-center
             %i.bi.bi-person-check-fill.fs-1.me-3
@@ -19,7 +19,7 @@
               %h5.card-title Active Volunteers
               %p.card-text.fs-4= @active_volunteers
     .col-md-3
-      .card.text-white.bg-info.mb-3
+      .card.text-white.bg-info.mb-3.h-100
         .card-body
           %div.d-flex.align-items-center
             %i.bi.bi-briefcase-fill.fs-1.me-3
@@ -27,7 +27,7 @@
               %h5.card-title Total Opportunities
               %p.card-text.fs-4= @total_opportunities
     .col-md-3
-      .card.text-white.bg-warning.mb-3
+      .card.text-white.bg-warning.mb-3.h-100
         .card-body
           %div.d-flex.align-items-center
             %i.bi.bi-check2-circle.fs-1.me-3
@@ -46,3 +46,36 @@
         .card-body
           %h5.card-title Volunteer Signups (last 30 days)
           %canvas#volunteerSignupChart{height: "200"}
+
+:javascript
+  document.addEventListener("DOMContentLoaded", function() {
+
+    // ----- Matched Opportunities Chart -----
+    const matchedCtx = document.getElementById('matchedOpportunitiesChart');
+
+    new Chart(matchedCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Matched', 'Unmatched'],
+        datasets: [{
+          data: [#{@matched_opportunities}, #{@unmatched_opportunities}]
+        }]
+      }
+    });
+
+    // ----- Volunteer Signup Chart -----
+    const signupCtx = document.getElementById('volunteerSignupChart');
+
+    new Chart(signupCtx, {
+      type: 'line',
+      data: {
+        labels: #{raw @volunteer_signups.keys.map(&:to_s).to_json},
+        datasets: [{
+          label: 'Signups',
+          data: #{raw @volunteer_signups.values.to_json},
+          fill: false
+        }]
+      }
+    });
+
+  });

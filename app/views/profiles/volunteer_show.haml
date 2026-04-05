@@ -1,21 +1,64 @@
 .container.mt-5
   %h1 My Profile
+
   %table.table.table-bordered.mt-3
     %tbody
       %tr
         %th First Name
         %td= @volunteer.first_name
+
       %tr
         %th Last Name
         %td= @volunteer.last_name
+
       %tr
         %th Email
         %td= @volunteer.email
+
+      / ✅ Inline Editable Phone Number
       %tr
         %th Phone Number
-        %td= @volunteer.phone_number
+        %td
+          %span#phone-display
+            = @volunteer.phone_number.presence || "Not set"
+
+          = form_with model: @volunteer,
+                      url: volunteer_profile_path,
+                      method: :patch,
+                      local: true,
+                      html: { id: "phone-form", class: "d-none d-inline" } do |f|
+
+            = f.text_field :phone_number,
+              value: @volunteer.phone_number,
+              class: "form-control d-inline w-auto"
+
+            = f.submit "Save", class: "btn btn-sm btn-success ms-2"
+
+            %button.btn.btn-sm.btn-secondary.ms-2{
+              type: "button",
+              onclick: "cancelPhoneEdit()"
+            }
+              Cancel
+
+          %button.btn.btn-sm.btn-outline-primary.ms-2{
+            type: "button",
+            onclick: "enablePhoneEdit()"
+          }
+            Edit
+
       %tr
         %th Skills
         %td= @volunteer.skills
 
-  = link_to "Edit Profile", volunteer_profile_edit_path, class: "btn btn-primary mt-3"
+  = link_to "Edit Full Profile", edit_volunteer_profile_path, class: "btn btn-primary mt-3"
+
+:javascript
+  function enablePhoneEdit() {
+    document.getElementById("phone-display").classList.add("d-none");
+    document.getElementById("phone-form").classList.remove("d-none");
+  }
+
+  function cancelPhoneEdit() {
+    document.getElementById("phone-display").classList.remove("d-none");
+    document.getElementById("phone-form").classList.add("d-none");
+  }

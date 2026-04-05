@@ -1,0 +1,51 @@
+.container.mt-5
+  %h1.mb-4 Help & FAQ
+
+  %p.lead
+    Welcome to Healthcare Volunteering. Below are answers to common questions for volunteers and organisations.
+
+  %hr
+
+  %h3.mt-4 For Volunteers
+
+  .accordion#volunteerFaq
+    .accordion-item
+      %h2.accordion-header
+        %button.accordion-button.collapsed{"data-bs-toggle" => "collapse", "data-bs-target" => "#vol1"}
+          How do I apply for an opportunity?
+      #vol1.accordion-collapse.collapse{"data-bs-parent" => "#volunteerFaq"}
+        .accordion-body
+          Browse opportunities from the homepage and click "Apply" on the opportunity you are interested in.
+
+    .accordion-item
+      %h2.accordion-header
+        %button.accordion-button.collapsed{"data-bs-toggle" => "collapse", "data-bs-target" => "#vol2"}
+          How do I update my profile?
+      #vol2.accordion-collapse.collapse{"data-bs-parent" => "#volunteerFaq"}
+        .accordion-body
+          Visit your profile page and use the inline edit options or click "Edit Full Profile".
+
+  %h3.mt-5 For Organisations
+
+  .accordion#orgFaq
+    .accordion-item
+      %h2.accordion-header
+        %button.accordion-button.collapsed{"data-bs-toggle" => "collapse", "data-bs-target" => "#org1"}
+          How do I post an opportunity?
+      #org1.accordion-collapse.collapse{"data-bs-parent" => "#orgFaq"}
+        .accordion-body
+          After signing in, go to your dashboard and click "Create Opportunity".
+
+    .accordion-item
+      %h2.accordion-header
+        %button.accordion-button.collapsed{"data-bs-toggle" => "collapse", "data-bs-target" => "#org2"}
+          How do I review applications?
+      #org2.accordion-collapse.collapse{"data-bs-parent" => "#orgFaq"}
+        .accordion-body
+          Navigate to your opportunity and click "View Applications" to manage applicants.
+
+  %hr.mt-5
+
+  %p.mt-4
+    Still need help?
+    = mail_to "support@healthvolunteer.com", "Contact Support"

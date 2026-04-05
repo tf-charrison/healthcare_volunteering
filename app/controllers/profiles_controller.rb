@@ -22,7 +22,7 @@ class ProfilesController < ApplicationController
       redirect_to volunteer_profile_path, notice: "Profile updated successfully."
     else
       flash.now[:alert] = "Could not update profile."
-      render :volunteer_edit
+      render :volunteer_show
     end
   end
 
