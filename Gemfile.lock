@@ -125,6 +125,8 @@ GEM
     drb (2.2.3)
     erb (6.0.1)
     erubi (1.13.1)
+    faker (3.6.1)
+      i18n (>= 1.8.11, < 2)
     ffi (1.17.2-aarch64-linux-gnu)
     ffi (1.17.2-aarch64-linux-musl)
     ffi (1.17.2-arm-linux-gnu)
@@ -393,6 +395,7 @@ DEPENDENCIES
   debug
   devise
   devise-two-factor
+  faker
   haml
   importmap-rails
   jbuilder
