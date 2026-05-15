@@ -18,7 +18,7 @@
           { include_blank: "All Experience Levels" },
           class: "form-control"
 
-    / ✅ Compliance Row
+    / Compliance-related filters
     .row.mt-3
       .col-md-4
         .form-check
@@ -68,18 +68,18 @@
                 %span.badge.bg-secondary Pending
             %td
               - if application.status == "pending"
-                / Approve button
+                / Approve application
                 = form_with url: change_status_opportunity_application_path(@opportunity, application, status: "approved"), method: :patch, local: true, class: "d-inline" do
                   = submit_tag "Approve", class: "btn btn-success btn-sm me-2"
 
-                / Reject button
+                / Reject application
                 = form_with url: change_status_opportunity_application_path(@opportunity, application, status: "rejected"), method: :patch, local: true, class: "d-inline" do
                   = submit_tag "Reject", class: "btn btn-danger btn-sm me-2"
 
-              / View Opportunity button
+              / Link back to opportunity details
               = link_to "View Opportunity", opportunity_path(@opportunity), class: "btn btn-secondary btn-sm me-2"
               - if volunteer_signed_in?
-                / View Updates button
+                / View updates/comments for this application
                 = link_to "View Updates", opportunity_application_application_updates_path(@opportunity, application), class: "btn btn-primary btn-sm"
   - else
     %p.text-muted No applications yet.

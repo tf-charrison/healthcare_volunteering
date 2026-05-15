@@ -1,10 +1,10 @@
 .container.mt-5
   %h1 Volunteer Search
 
-  / 🔎 Filter Form
+  / 🔎 Filter Form for searching and filtering volunteers
   = form_with url: volunteers_organisations_path, method: :get, local: true, class: "mb-4" do |f|
 
-    / First row: Email / ID
+    / First row: Email / ID filters
     .row.g-3.mb-3
       .col-md-4
         = f.label :email, "Search by Email"
@@ -44,7 +44,7 @@
             class: "form-control",
             selected: params[:availability]
 
-    / Third row: Certifications / Compliance
+    / Third row: Certifications / Compliance checkboxes
     .row.mt-3
       .col-md-3
         .form-check
@@ -59,19 +59,22 @@
       .col-md-3
         .form-check
           = f.check_box :first_aid_certified, class: "form-check-input"
-          = f.label :first_aid_certified, "First aid certified", class: "form-check-label"
+          = f.label :first_aid_certified, "First Aid Certified", class: "form-check-label"
 
       .col-md-3
         .form-check
           = f.check_box :background_checked, class: "form-check-input"
           = f.label :background_checked, "Background Checked", class: "form-check-label"
 
+    / Form actions
     .mt-3
       = f.submit "Search", class: "btn btn-primary me-2"
       = link_to "Reset", volunteers_organisations_path, class: "btn btn-secondary"
+
       - if @volunteers.any?
         = link_to "Export CSV", export_volunteers_organisations_path(request.query_parameters), class: "btn btn-success ms-2"
 
+  / Results table
   - if @volunteers.any?
     .table-responsive
       %table.table.table-striped

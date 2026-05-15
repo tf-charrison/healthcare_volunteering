@@ -1,6 +1,7 @@
 .container.mt-5
   %h1 My Profile
 
+  / Volunteer profile details table
   %table.table.table-bordered.mt-3
     %tbody
       %tr
@@ -15,13 +16,14 @@
         %th Email
         %td= @volunteer.email
 
-      / ✅ Inline Editable Phone Number
+      / Inline editable phone number section
       %tr
         %th Phone Number
         %td
           %span#phone-display
             = @volunteer.phone_number.presence || "Not set"
 
+          / Inline edit form (hidden by default)
           = form_with model: @volunteer,
                       url: volunteer_profile_path,
                       method: :patch,
@@ -50,6 +52,7 @@
         %th Skills
         %td= @volunteer.skills
 
+  / Link to full profile edit page
   = link_to "Edit Full Profile", edit_volunteer_profile_path, class: "btn btn-primary mt-3"
 
 :javascript

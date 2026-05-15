@@ -31,7 +31,9 @@
         / Like Section
         / ----------------------------
         .mt-2
+          -# Check if the current volunteer has already liked the post
           - liked = post.community_likes.exists?(volunteer: current_volunteer)
+
           = button_to "👍 #{post.community_likes.count}",
               community_post_like_path(post),
               method: :post,

@@ -1,8 +1,12 @@
 .container.mt-5
   %h1.mb-4 Add Update for Application
+
+  -# Form to create a new update associated with the application
   = form_with model: [@application, @update], local: true do |f|
     .mb-3
+      -# Input for the update message
       = f.label :message
       = f.text_area :message, class: "form-control", rows: 5
 
+    -# Submit button to save the update
     = f.submit "Save Update", class: "btn btn-success mt-2"

@@ -3,6 +3,7 @@
     .col-lg-6
       %h2.mb-4 Volunteer Sign In
 
+      / Devise volunteer login form
       = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
         = render "devise/shared/error_messages", resource: resource
 
@@ -13,6 +14,8 @@
         .mb-3
           = f.label :password, class: "form-label"
           = f.password_field :password, autocomplete: "current-password", class: "form-control"
+
+        / Optional 2FA (OTP) field if required
         - if resource&.otp_required_for_login || params[:otp_attempt].present?
           .mb-3
             = f.label :otp_attempt, "2FA Code", class: "form-label"
@@ -22,7 +25,10 @@
           = f.check_box :remember_me, class: "form-check-input"
           = f.label :remember_me, class: "form-check-label"
 
+        / Submit button
         = f.submit "Sign In", class: "btn btn-primary mt-3 w-100"
+
+      / Link to registration for new users
       %p.text-center.mt-3
         Don't have an account?
         = link_to "Sign up", new_volunteer_registration_path

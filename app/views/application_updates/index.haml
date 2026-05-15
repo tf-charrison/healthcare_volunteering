@@ -5,12 +5,14 @@
     %ul.list-group
       - @updates.each do |update|
         %li.list-group-item
+          -# Show who created the update and when it was created
           %strong= "#{update.user_type} (#{update.created_at.strftime('%d %b %Y %H:%M')})"
           %p= update.message
   - else
     %p.text-muted No updates yet.
 
   .mt-3
+    -# Navigation buttons back to opportunity and dashboard
     = link_to "View Opportunity", opportunity_path(@application.opportunity),
       class: "btn btn-secondary me-2"
     = link_to "Back to My Applications", dashboard_path,

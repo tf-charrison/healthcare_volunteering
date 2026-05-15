@@ -1,5 +1,7 @@
 .container.mt-5
   %h1 Organisation Profile
+
+  / Organisation details table
   %table.table.table-bordered.mt-3
     %tbody
       %tr
@@ -18,4 +20,5 @@
         %th Location
         %td= @organisation.location
 
+  / Link to edit the organisation profile
   = link_to "Edit Profile", edit_organisation_profile_path, class: "btn btn-success mt-3"

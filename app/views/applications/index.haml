@@ -57,10 +57,13 @@
               - else
                 %span.badge.bg-secondary No Match
             %td
+              -# Only organisation users can change application status
               - if organisation_signed_in?
                 - if application.status == "pending"
                   = link_to "Approve", change_status_opportunity_application_path(@opportunity, application, status: "approved"), method: :patch, class: "btn btn-success btn-sm me-2"
                   = link_to "Reject", change_status_opportunity_application_path(@opportunity, application, status: "rejected"), method: :patch, class: "btn btn-danger btn-sm"
+
+              -# All users can view the application
               = link_to "View", opportunity_application_path(@opportunity, application), class: "btn btn-primary btn-sm ms-2"
   - else
     %p No applications yet.
